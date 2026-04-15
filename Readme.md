@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Вадим Голубев](https://up.htmlacademy.ru/javascript-individual/2/user/233618).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Атаманов](https://htmlacademy.ru/profile/bellavin).
 
 ---
 
