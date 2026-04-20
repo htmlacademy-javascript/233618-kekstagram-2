@@ -2,13 +2,16 @@ const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
 const checkForPalindrome = (string) => {
   const normalizeString = string.replaceAll(' ', '').toLowerCase();
-  let index = normalizeString.length - 1;
+  let left = 0;
+  let right = normalizeString.length - 1;
 
-  for(const char of normalizeString) {
-    if(char !== normalizeString[index]) {
+  while(left < right) {
+    if(normalizeString[left] !== normalizeString[right]) {
       return false;
     }
-    index--;
+
+    left++;
+    right--;
   }
 
   return true;
