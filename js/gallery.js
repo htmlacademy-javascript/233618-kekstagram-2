@@ -7,9 +7,8 @@ const getNodeElement = (block, element) => block.querySelector(`.picture__${elem
 const renderGalley = (data) => {
   data.forEach(({url, description, likes, comments}) => {
     const newItem = pictureTemplate.cloneNode(true);
-    const imgNode = getNodeElement(newItem, 'img');
-    const likesNode = getNodeElement(newItem, 'likes');
-    const commentsNode = getNodeElement(newItem, 'comments');
+    const [imgNode, likesNode, commentsNode] =
+      ['img', 'likes', 'comments'].map((el) => getNodeElement(newItem, el));
 
     imgNode.src = url;
     imgNode.alt = description;
