@@ -2,20 +2,19 @@ const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const picturesFragment = document.createDocumentFragment();
 
-const getNodeElement = (block, element) => block.querySelector(`.picture__${element}`);
-
 const renderGalley = (data) => {
   data.forEach(({url, description, likes, comments}) => {
-    const newItem = pictureTemplate.cloneNode(true);
-    const [imgNode, likesNode, commentsNode] =
-      ['img', 'likes', 'comments'].map((el) => getNodeElement(newItem, el));
+    const pictureNode = pictureTemplate.cloneNode(true);
+    const imageNode = pictureNode.querySelector('.picture__img');
+    const likesNode = pictureNode.querySelector('.picture__likes');
+    const commentsNode = pictureNode.querySelector('.picture__comments');
 
-    imgNode.src = url;
-    imgNode.alt = description;
+    imageNode.src = url;
+    imageNode.alt = description;
     likesNode.textContent = likes;
     commentsNode.textContent = comments.length;
 
-    picturesFragment.append(newItem);
+    picturesFragment.append(pictureNode);
   });
 
   picturesContainer.append(picturesFragment);
