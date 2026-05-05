@@ -7,15 +7,15 @@ const commentsFragment = document.createDocumentFragment();
 
 const setCommentsFeed = (comments) => {
   comments.forEach(({avatar, message, name}) => {
-    const comment = commentElement.cloneNode(true);
-    const authorAvatar = comment.querySelector('.social__picture');
-    const commentText = comment.querySelector('.social__text');
+    const newCommentElement = commentElement.cloneNode(true);
+    const avatarElement = newCommentElement.querySelector('.social__picture');
+    const textElement = newCommentElement.querySelector('.social__text');
 
-    authorAvatar.src = avatar;
-    authorAvatar.alt = name;
-    commentText.textContent = message;
+    avatarElement.src = avatar;
+    avatarElement.alt = name;
+    textElement.textContent = message;
 
-    commentsFragment.append(comment);
+    commentsFragment.append(newCommentElement);
   });
 
   commentsElement.append(commentsFragment);
