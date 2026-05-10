@@ -1,5 +1,5 @@
 import { isEscapeKey, isEnterKey, isSpaceKey } from './util.js';
-import { renderComments } from './comments.js';
+import { renderComments, onLoaderClick } from './comments.js';
 
 const bodyElement = document.body;
 const picturesElement = document.querySelector('.pictures');
@@ -10,6 +10,7 @@ const likesElement = photoElement.querySelector('.likes-count');
 const shownCommentsElement = photoElement.querySelector('.social__comment-shown-count');
 const totalCommentsElement = photoElement.querySelector('.social__comment-total-count');
 const descriptionElement = photoElement.querySelector('.social__caption');
+const commentsLoaderElement = photoElement.querySelector('.social__comments-loader');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -29,6 +30,7 @@ function closePhotoModal() {
   bodyElement.classList.remove('modal-open');
 
   photoElement.removeEventListener('click', onOverlayClick);
+  commentsLoaderElement.removeEventListener('click', onLoaderClick);
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
