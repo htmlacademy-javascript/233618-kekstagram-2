@@ -1,7 +1,9 @@
 import { genereteData } from './data.js';
-import { renderGalley } from './gallery.js';
-import { addGalleryEventListeners } from './photoModal.js';
+import { renderGalley } from './components/gallery.js';
+import { renderPhotoModal } from './components/photo-modal.js';
 
 const data = genereteData();
-renderGalley(data);
-addGalleryEventListeners(data);
+const picturesElement = document.querySelector('.pictures');
+
+renderGalley(data, picturesElement);
+renderPhotoModal(data, picturesElement);
