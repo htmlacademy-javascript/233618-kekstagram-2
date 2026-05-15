@@ -69,8 +69,11 @@ const renderPhotoModal = (data, toggleElement) => {
   toggleElement.addEventListener('click', (evt) => openPhotoModal(evt, data));
   commentsLoaderElement.addEventListener('click', onLoaderClick);
 
-  toggleElement.addEventListener('keydown', (evt) => {
-    if (isEnterKey(evt) || isSpaceKey(evt)) {
+  document.addEventListener('keydown', (evt) => {
+    if (
+      evt.target.matches('.picture') &&
+      (isEnterKey(evt) || isSpaceKey(evt))
+    ) {
       openPhotoModal(evt, data);
     }
   });
