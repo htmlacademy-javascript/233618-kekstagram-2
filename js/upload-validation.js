@@ -14,7 +14,7 @@ const validateHashtagsFormat = (value) => {
     return true;
   }
 
-  const hashtags = value.trim().split(' ');
+  const hashtags = value.trim().split(/\s+/);
   return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
 };
 
@@ -23,7 +23,7 @@ const validatekHashtagsAmount = (value) => {
     return true;
   }
 
-  return value.trim().split(' ').length <= 5;
+  return value.trim().split(/\s+/).length <= 5;
 };
 
 const validateHashtagsDuplication = (value) => {
@@ -33,7 +33,7 @@ const validateHashtagsDuplication = (value) => {
 
   const hashtags = value
     .trim()
-    .split(' ')
+    .split(/\s+/)
     .map((hashtag) => hashtag.toLowerCase());
   const uniqHashtags = [];
 
@@ -69,8 +69,8 @@ pristine.addValidator(
   'Максимум 140 символов',
 );
 
-const onUploadFormSubmit = (evt) => {
-  evt.preventDefault();
+const onUploadFormSubmit = (event) => {
+  event.preventDefault();
 
   if (pristine.validate()) {
     formElement.submit();

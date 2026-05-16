@@ -12,27 +12,16 @@ const getFilter = (type, value, unit = '') => `${type}(${value}${unit})`;
 const checkForSliderHidden = () =>
   containerElement.classList.contains('hidden');
 
-function getSliderOptions(min, max, step) {
-  return {
-    range: {
-      min: min,
-      max: max,
-    },
-    start: max,
-    step: step,
-    format: {
-      to: function (value) {
-        if (Number.isInteger(value)) {
-          return value.toFixed(0);
-        }
-        return value.toFixed(1);
-      },
-      from: function (value) {
-        return value;
-      },
-    },
-  };
-}
+const getSliderOptions = (min, max, step) => ({
+  range: { min, max },
+  start: max,
+  step,
+  format: {
+    to: (value) =>
+      Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1),
+    from: (value) => value,
+  },
+});
 
 const EFFECTS = {
   chrome: {
@@ -74,38 +63,39 @@ const clearEffects = (preview) => {
   }
 };
 
-function onEffectChange(preview) {
-  return function (evt) {
-    if (evt.target.matches('input[name="effect"]')) {
-      const effect = EFFECTS[evt.target.value];
+const createOnEffectChange = (preview) => (event) => {
+  if (event.target.matches('input[name="effect"]')) {
+    const effect = EFFECTS[event.target.value];
 
-      if (effect) {
-        preview.style.filter = effect.filter();
-        effectLevelElement.value = parseNumbers(effect.filter());
-        if (checkForSliderHidden()) {
-          containerElement.classList.remove('hidden');
-        }
+    if (effect) {
+      preview.style.filter = effect.filter();
+      effectLevelElement.value = parseNumbers(effect.filter());
+      if (checkForSliderHidden()) {
+        containerElement.classList.remove('hidden');
+      }
 
-        sliderElement.noUiSlider.updateOptions(effect.sliderOptions);
-        sliderElement.noUiSlider.on('update', (value) => {
-          preview.style.filter = effect.filter(value);
-          effectLevelElement.value = value;
-        });
-      } else {
-        if (preview.style.filter) {
-          clearEffects(preview);
-        }
+      sliderElement.noUiSlider.updateOptions(effect.sliderOptions);
+      sliderElement.noUiSlider.on('update', (value) => {
+        preview.style.filter = effect.filter(value);
+        effectLevelElement.value = value;
+      });
+    } else {
+      if (preview.style.filter) {
+        clearEffects(preview);
       }
     }
-  };
-}
+  }
+};
 
 // Scale
 
-const updateScale = (currentScale, direction) => {
-  const value = currentScale.replace('%', '');
-  const step = direction === 'bigger' ? 25 : -25;
-  const newValue = Number(value) + step;
+const SCALE = {
+  up: 25,
+  down: -25,
+};
+
+const updateScale = (currentScale, step) => {
+  const newValue = Number(currentScale.replace('%', '')) + step;
 
   return {
     inputValue: `${newValue}%`,
@@ -113,28 +103,26 @@ const updateScale = (currentScale, direction) => {
   };
 };
 
-function onScaleBtnClick(input, preview) {
-  return function (evt) {
-    const currentScale = input.value;
-    let updatedData;
+const createOnScaleButtonClick = (input, preview) => (event) => {
+  const currentScale = input.value;
+  let updatedData;
 
-    if (
-      evt.target.matches('.scale__control--smaller') &&
-      currentScale !== '25%'
-    ) {
-      updatedData = updateScale(currentScale, 'smaller');
-    } else if (
-      evt.target.matches('.scale__control--bigger') &&
-      currentScale !== '100%'
-    ) {
-      updatedData = updateScale(currentScale, 'bigger');
-    }
+  if (
+    event.target.matches('.scale__control--smaller') &&
+    currentScale !== '25%'
+  ) {
+    updatedData = updateScale(currentScale, SCALE.down);
+  } else if (
+    event.target.matches('.scale__control--bigger') &&
+    currentScale !== '100%'
+  ) {
+    updatedData = updateScale(currentScale, SCALE.up);
+  }
 
-    if (updatedData) {
-      input.value = updatedData.inputValue;
-      preview.style.transform = `scale(${updatedData.scale})`;
-    }
-  };
-}
+  if (updatedData) {
+    input.value = updatedData.inputValue;
+    preview.style.transform = `scale(${updatedData.scale})`;
+  }
+};
 
-export { onEffectChange, clearEffects, onScaleBtnClick };
+export { createOnEffectChange, clearEffects, createOnScaleButtonClick };

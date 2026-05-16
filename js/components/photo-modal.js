@@ -17,16 +17,16 @@ const commentsLoaderElement = photoElement.querySelector(
   '.social__comments-loader',
 );
 
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
+const onDocumentKeydown = (event) => {
+  if (isEscapeKey(event)) {
+    event.preventDefault();
     closePhotoModal();
   }
 };
 
-const onOverlayClick = (evt) => {
+const onOverlayClick = (event) => {
   if (
-    !photoElement.querySelector('.big-picture__preview').contains(evt.target)
+    !photoElement.querySelector('.big-picture__preview').contains(event.target)
   ) {
     closePhotoModal();
   }
@@ -40,12 +40,15 @@ function closePhotoModal() {
   document.removeEventListener('keydown', onDocumentKeydown);
 }
 
-const openPhotoModal = (evt, data) => {
-  if (evt.target.matches('.picture__img') || evt.target.closest('.picture')) {
-    evt.preventDefault();
+const openPhotoModal = (event, data) => {
+  if (
+    event.target.matches('.picture__img') ||
+    event.target.closest('.picture')
+  ) {
+    event.preventDefault();
 
     const image =
-      evt.type === 'click' ? evt.target : evt.target.querySelector('img');
+      event.type === 'click' ? event.target : event.target.querySelector('img');
     const photo = data.find((item) => image.src.match(item.url));
     const totalCommentsCount = photo.comments.length;
     const shownCommentsCount = totalCommentsCount > 5 ? 5 : totalCommentsCount;
@@ -66,12 +69,14 @@ const openPhotoModal = (evt, data) => {
 };
 
 const renderPhotoModal = (data, toggleElement) => {
-  toggleElement.addEventListener('click', (evt) => openPhotoModal(evt, data));
+  toggleElement.addEventListener('click', (event) =>
+    openPhotoModal(event, data),
+  );
   commentsLoaderElement.addEventListener('click', onLoaderClick);
 
-  toggleElement.addEventListener('keydown', (evt) => {
-    if (isEnterKey(evt) || isSpaceKey(evt)) {
-      openPhotoModal(evt, data);
+  toggleElement.addEventListener('keydown', (event) => {
+    if (isEnterKey(event) || isSpaceKey(event)) {
+      openPhotoModal(event, data);
     }
   });
 

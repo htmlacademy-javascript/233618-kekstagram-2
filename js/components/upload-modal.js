@@ -1,6 +1,10 @@
 import { isEscapeKey } from '../util.js';
 import { onUploadFormSubmit } from '../upload-validation.js';
-import { onEffectChange, clearEffects, onScaleBtnClick } from '../effects.js';
+import {
+  createOnEffectChange,
+  clearEffects,
+  createOnScaleButtonClick,
+} from '../effects.js';
 
 const bodyElement = document.querySelector('body');
 const formElement = document.querySelector('#upload-select-image');
@@ -17,9 +21,9 @@ const uploadedPreviewElement = formElement.querySelector(
   '.img-upload__preview img',
 );
 
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
+const onDocumentKeydown = (event) => {
+  if (isEscapeKey(event)) {
+    event.preventDefault();
     closeUploadModal();
   }
 };
@@ -32,6 +36,13 @@ const onInputBlur = () => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
+const onScaleButtonClick = createOnScaleButtonClick(
+  scaleInputElement,
+  uploadedPreviewElement,
+);
+
+const onEffectChange = createOnEffectChange(uploadedPreviewElement);
+
 function closeUploadModal() {
   overlayElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
@@ -42,18 +53,11 @@ function closeUploadModal() {
   uploadedPreviewElement.style.removeProperty('transform');
   clearEffects(uploadedPreviewElement);
 
-  scaleButtonElements.forEach((btn) =>
-    btn.removeEventListener(
-      'click',
-      onScaleBtnClick(scaleInputElement, uploadedPreviewElement),
-    ),
+  scaleButtonElements.forEach((button) =>
+    button.removeEventListener('click', onScaleButtonClick),
   );
 
-  formElement.removeEventListener(
-    'change',
-    onEffectChange(uploadedPreviewElement),
-  );
-
+  formElement.removeEventListener('change', onEffectChange);
   formElement.removeEventListener('submit', onUploadFormSubmit);
   document.removeEventListener('keydown', onDocumentKeydown);
 
@@ -68,18 +72,11 @@ const renderUploadModal = () => {
     overlayElement.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
 
-    scaleButtonElements.forEach((btn) =>
-      btn.addEventListener(
-        'click',
-        onScaleBtnClick(scaleInputElement, uploadedPreviewElement),
-      ),
+    scaleButtonElements.forEach((button) =>
+      button.addEventListener('click', onScaleButtonClick),
     );
 
-    formElement.addEventListener(
-      'change',
-      onEffectChange(uploadedPreviewElement),
-    );
-
+    formElement.addEventListener('change', onEffectChange);
     formElement.addEventListener('submit', onUploadFormSubmit);
     overlayCloseElement.addEventListener('click', closeUploadModal);
     document.addEventListener('keydown', onDocumentKeydown);

@@ -2,9 +2,9 @@ const getRandomNumber = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 const getRandomItemFrom = (items) =>
   items[getRandomNumber(0, items.length - 1)];
-const isEscapeKey = (evt) => evt.key === 'Escape';
-const isEnterKey = (evt) => evt.key === 'Enter';
-const isSpaceKey = (evt) => evt.key === ' ';
+const isEscapeKey = (event) => event.key === 'Escape';
+const isEnterKey = (event) => event.key === 'Enter';
+const isSpaceKey = (event) => event.key === ' ';
 
 const parseNumbers = (argument) => {
   const string = Number.isFinite(argument) ? argument.toString() : argument;
