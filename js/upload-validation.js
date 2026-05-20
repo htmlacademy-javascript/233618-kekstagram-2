@@ -1,4 +1,8 @@
+import { sendData } from './api.js';
+import { showAlert } from './components/alerts.js';
+
 const formElement = document.querySelector('#upload-select-image');
+const submitElement = formElement.querySelector('button[type="submit"]');
 const hashtagsElement = formElement.querySelector('input[name="hashtags"]');
 const descriptionElement = formElement.querySelector('.text__description');
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -69,12 +73,23 @@ pristine.addValidator(
   'Максимум 140 символов',
 );
 
-const onUploadFormSubmit = (event) => {
-  event.preventDefault();
+const setUploadFormSubmit = (onSuccess) => {
+  formElement.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-  if (pristine.validate()) {
-    formElement.submit();
-  }
+    if (pristine.validate()) {
+      submitElement.disabled = true;
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .then(showAlert())
+        .catch(() => {
+          showAlert('error');
+        })
+        .finally(() => {
+          submitElement.disabled = false;
+        });
+    }
+  });
 };
 
-export { onUploadFormSubmit };
+export { setUploadFormSubmit };
