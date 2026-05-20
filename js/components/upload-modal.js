@@ -1,12 +1,11 @@
 import { isEscapeKey } from '../util.js';
-import { onUploadFormSubmit } from '../upload-validation.js';
 import {
   createOnEffectChange,
   clearEffects,
   createOnScaleButtonClick,
 } from '../effects.js';
 
-const bodyElement = document.querySelector('body');
+const bodyElement = document.body;
 const formElement = document.querySelector('#upload-select-image');
 const hashtagsElement = formElement.querySelector('input[name="hashtags"]');
 const descriptionElement = formElement.querySelector('.text__description');
@@ -58,7 +57,6 @@ function closeUploadModal() {
   );
 
   formElement.removeEventListener('change', onEffectChange);
-  formElement.removeEventListener('submit', onUploadFormSubmit);
   document.removeEventListener('keydown', onDocumentKeydown);
 
   [hashtagsElement, descriptionElement].forEach((input) => {
@@ -77,7 +75,6 @@ const renderUploadModal = () => {
     );
 
     formElement.addEventListener('change', onEffectChange);
-    formElement.addEventListener('submit', onUploadFormSubmit);
     overlayCloseElement.addEventListener('click', closeUploadModal);
     document.addEventListener('keydown', onDocumentKeydown);
 
@@ -88,4 +85,4 @@ const renderUploadModal = () => {
   });
 };
 
-export { renderUploadModal };
+export { closeUploadModal, renderUploadModal };
