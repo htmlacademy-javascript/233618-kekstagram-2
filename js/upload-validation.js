@@ -22,7 +22,7 @@ const validateHashtagsFormat = (value) => {
   return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
 };
 
-const validatekHashtagsAmount = (value) => {
+const validateHashtagsAmount = (value) => {
   if (value.length === 0) {
     return true;
   }
@@ -59,7 +59,7 @@ pristine.addValidator(
 );
 pristine.addValidator(
   hashtagsElement,
-  validatekHashtagsAmount,
+  validateHashtagsAmount,
   'Максимум 5 хэштегов',
 );
 pristine.addValidator(
