@@ -1,4 +1,4 @@
-import { sendData } from './api.js';
+import { sendPhoto } from './api.js';
 import { showAlert } from './components/alerts.js';
 
 const formElement = document.querySelector('#upload-select-image');
@@ -74,16 +74,16 @@ pristine.addValidator(
 );
 
 const setUploadFormSubmit = (onSuccess) => {
-  formElement.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  formElement.addEventListener('submit', (event) => {
+    event.preventDefault();
 
     if (pristine.validate()) {
       submitElement.disabled = true;
-      sendData(new FormData(evt.target))
+      sendPhoto(new FormData(event.target))
         .then(onSuccess)
-        .then(showAlert())
+        .then(showAlert)
         .catch(() => {
-          showAlert('error');
+          showAlert('ERROR');
         })
         .finally(() => {
           submitElement.disabled = false;

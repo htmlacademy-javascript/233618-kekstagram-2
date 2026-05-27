@@ -21,7 +21,7 @@ const uploadedPreviewElement = formElement.querySelector(
 );
 
 const onDocumentKeydown = (event) => {
-  if (isEscapeKey(event)) {
+  if (isEscapeKey(event) && !bodyElement.querySelector('.alert')) {
     event.preventDefault();
     closeUploadModal();
   }

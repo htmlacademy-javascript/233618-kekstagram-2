@@ -1,4 +1,4 @@
-import { getData } from './api.js';
+import { fetchPhotos } from './api.js';
 import { renderGalley } from './components/gallery.js';
 import { renderPhotoModal } from './components/photo-modal.js';
 import {
@@ -10,12 +10,12 @@ import { showAlert } from './components/alerts.js';
 
 const picturesElement = document.querySelector('.pictures');
 
-getData()
+fetchPhotos()
   .then((data) => {
     renderGalley(data, picturesElement);
     renderPhotoModal(data, picturesElement);
   })
-  .catch(() => showAlert('dataError'));
+  .catch(() => showAlert('DATA_ERROR'));
 
 renderUploadModal();
 setUploadFormSubmit(closeUploadModal);
