@@ -1,5 +1,6 @@
 import { fetchPhotos } from './api.js';
-import { renderGalley } from './components/gallery.js';
+import { debounce } from './util.js';
+import { renderGalley, setFilterClick } from './components/gallery.js';
 import { renderPhotoModal } from './components/photo-modal.js';
 import {
   renderUploadModal,
@@ -14,6 +15,7 @@ fetchPhotos()
   .then((data) => {
     renderGalley(data, picturesElement);
     renderPhotoModal(data, picturesElement);
+    setFilterClick(debounce(() => renderGalley(data, picturesElement)));
   })
   .catch(() => showAlert('DATA_ERROR'));
 

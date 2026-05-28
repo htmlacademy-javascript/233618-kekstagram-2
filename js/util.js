@@ -21,6 +21,15 @@ const parseNumbers = (argument) => {
   return parseInt(numbers, 2);
 };
 
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   getRandomNumber,
   getRandomItemFrom,
@@ -28,4 +37,5 @@ export {
   isEnterKey,
   isSpaceKey,
   parseNumbers,
+  debounce,
 };
