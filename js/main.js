@@ -1,11 +1,21 @@
-import { genereteData } from './data.js';
+import { fetchPhotos } from './api.js';
 import { renderGalley } from './components/gallery.js';
 import { renderPhotoModal } from './components/photo-modal.js';
-import { renderUploadModal } from './components/upload-modal.js';
+import {
+  renderUploadModal,
+  closeUploadModal,
+} from './components/upload-modal.js';
+import { setUploadFormSubmit } from './upload-validation.js';
+import { showAlert } from './components/alerts.js';
 
-const data = genereteData();
 const picturesElement = document.querySelector('.pictures');
 
-renderGalley(data, picturesElement);
-renderPhotoModal(data, picturesElement);
+fetchPhotos()
+  .then((data) => {
+    renderGalley(data, picturesElement);
+    renderPhotoModal(data, picturesElement);
+  })
+  .catch(() => showAlert('DATA_ERROR'));
+
 renderUploadModal();
+setUploadFormSubmit(closeUploadModal);

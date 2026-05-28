@@ -1,4 +1,8 @@
+import { sendPhoto } from './api.js';
+import { showAlert } from './components/alerts.js';
+
 const formElement = document.querySelector('#upload-select-image');
+const submitElement = formElement.querySelector('button[type="submit"]');
 const hashtagsElement = formElement.querySelector('input[name="hashtags"]');
 const descriptionElement = formElement.querySelector('.text__description');
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -18,7 +22,7 @@ const validateHashtagsFormat = (value) => {
   return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
 };
 
-const validatekHashtagsAmount = (value) => {
+const validateHashtagsAmount = (value) => {
   if (value.length === 0) {
     return true;
   }
@@ -55,7 +59,7 @@ pristine.addValidator(
 );
 pristine.addValidator(
   hashtagsElement,
-  validatekHashtagsAmount,
+  validateHashtagsAmount,
   'Максимум 5 хэштегов',
 );
 pristine.addValidator(
@@ -69,12 +73,23 @@ pristine.addValidator(
   'Максимум 140 символов',
 );
 
-const onUploadFormSubmit = (event) => {
-  event.preventDefault();
+const setUploadFormSubmit = (onSuccess) => {
+  formElement.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-  if (pristine.validate()) {
-    formElement.submit();
-  }
+    if (pristine.validate()) {
+      submitElement.disabled = true;
+      sendPhoto(new FormData(event.target))
+        .then(onSuccess)
+        .then(showAlert)
+        .catch(() => {
+          showAlert('ERROR');
+        })
+        .finally(() => {
+          submitElement.disabled = false;
+        });
+    }
+  });
 };
 
-export { onUploadFormSubmit };
+export { setUploadFormSubmit };
