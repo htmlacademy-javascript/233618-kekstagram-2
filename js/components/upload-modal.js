@@ -1,4 +1,5 @@
 import { isEscapeKey } from '../util.js';
+import { setPristine, createOnUploadFormSubmit } from '../upload-validation.js';
 import {
   createOnEffectChange,
   clearEffects,
@@ -7,6 +8,7 @@ import {
 
 const bodyElement = document.body;
 const formElement = document.querySelector('#upload-select-image');
+const submitElement = formElement.querySelector('button[type="submit"]');
 const hashtagsElement = formElement.querySelector('input[name="hashtags"]');
 const descriptionElement = formElement.querySelector('.text__description');
 const overlayElement = formElement.querySelector('.img-upload__overlay');
@@ -19,6 +21,9 @@ const scaleButtonElements = formElement.querySelectorAll(
 const uploadedPreviewElement = formElement.querySelector(
   '.img-upload__preview img',
 );
+
+let pristine;
+let onUploadFormSubmit;
 
 const onDocumentKeydown = (event) => {
   if (isEscapeKey(event) && !bodyElement.querySelector('.alert')) {
@@ -45,19 +50,18 @@ const onEffectChange = createOnEffectChange(uploadedPreviewElement);
 function closeUploadModal() {
   overlayElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
-  uploadInputElement.value = '';
-  hashtagsElement.value = '';
-  descriptionElement.value = '';
-  scaleInputElement.value = '100%';
+  formElement.reset();
   uploadedPreviewElement.style.removeProperty('transform');
   clearEffects(uploadedPreviewElement);
+  pristine.destroy();
+
+  formElement.removeEventListener('submit', onUploadFormSubmit);
+  formElement.removeEventListener('change', onEffectChange);
+  document.removeEventListener('keydown', onDocumentKeydown);
 
   scaleButtonElements.forEach((button) =>
     button.removeEventListener('click', onScaleButtonClick),
   );
-
-  formElement.removeEventListener('change', onEffectChange);
-  document.removeEventListener('keydown', onDocumentKeydown);
 
   [hashtagsElement, descriptionElement].forEach((input) => {
     input.removeEventListener('focus', onInputFocus);
@@ -70,13 +74,22 @@ const renderUploadModal = () => {
     overlayElement.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
 
-    scaleButtonElements.forEach((button) =>
-      button.addEventListener('click', onScaleButtonClick),
+    pristine = setPristine(formElement, hashtagsElement, descriptionElement);
+    onUploadFormSubmit = createOnUploadFormSubmit(
+      formElement,
+      submitElement,
+      pristine,
+      closeUploadModal,
     );
 
+    formElement.addEventListener('submit', onUploadFormSubmit);
     formElement.addEventListener('change', onEffectChange);
     overlayCloseElement.addEventListener('click', closeUploadModal);
     document.addEventListener('keydown', onDocumentKeydown);
+
+    scaleButtonElements.forEach((button) =>
+      button.addEventListener('click', onScaleButtonClick),
+    );
 
     [hashtagsElement, descriptionElement].forEach((input) => {
       input.addEventListener('focus', onInputFocus);

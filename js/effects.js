@@ -58,6 +58,7 @@ noUiSlider.create(sliderElement, {
 const clearEffects = (preview) => {
   preview.style.removeProperty('filter');
   effectLevelElement.value = '';
+  document.querySelector('#effect-none').checked = true;
   if (!checkForSliderHidden()) {
     containerElement.classList.add('hidden');
   }

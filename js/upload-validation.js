@@ -1,17 +1,7 @@
 import { sendPhoto } from './api.js';
 import { showAlert } from './components/alerts.js';
 
-const formElement = document.querySelector('#upload-select-image');
-const submitElement = formElement.querySelector('button[type="submit"]');
-const hashtagsElement = formElement.querySelector('input[name="hashtags"]');
-const descriptionElement = formElement.querySelector('.text__description');
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
-
-const pristine = new Pristine(formElement, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-});
 
 const validateHashtagsFormat = (value) => {
   if (value.length === 0) {
@@ -52,29 +42,42 @@ const validateHashtagsDuplication = (value) => {
 
 const validateDescription = (value) => value.length <= 140;
 
-pristine.addValidator(
-  hashtagsElement,
-  validateHashtagsFormat,
-  'Введен невалидный хэштег',
-);
-pristine.addValidator(
-  hashtagsElement,
-  validateHashtagsAmount,
-  'Максимум 5 хэштегов',
-);
-pristine.addValidator(
-  hashtagsElement,
-  validateHashtagsDuplication,
-  'Хэштеги повторяются',
-);
-pristine.addValidator(
-  descriptionElement,
-  validateDescription,
-  'Максимум 140 символов',
-);
+const setPristine = (formElement, hashtagsElement, descriptionElement) => {
+  const pristine = new Pristine(formElement, {
+    classTo: 'img-upload__field-wrapper',
+    errorTextParent: 'img-upload__field-wrapper',
+    errorTextClass: 'img-upload__field-wrapper--error',
+  });
 
-const setUploadFormSubmit = (onSuccess) => {
-  formElement.addEventListener('submit', (event) => {
+  pristine.addValidator(
+    hashtagsElement,
+    validateHashtagsFormat,
+    'Введен невалидный хэштег',
+  );
+
+  pristine.addValidator(
+    hashtagsElement,
+    validateHashtagsAmount,
+    'Максимум 5 хэштегов',
+  );
+
+  pristine.addValidator(
+    hashtagsElement,
+    validateHashtagsDuplication,
+    'Хэштеги повторяются',
+  );
+
+  pristine.addValidator(
+    descriptionElement,
+    validateDescription,
+    'Максимум 140 символов',
+  );
+
+  return pristine;
+};
+
+const createOnUploadFormSubmit =
+  (formElement, submitElement, pristine, onSuccess) => (event) => {
     event.preventDefault();
 
     if (pristine.validate()) {
@@ -89,7 +92,6 @@ const setUploadFormSubmit = (onSuccess) => {
           submitElement.disabled = false;
         });
     }
-  });
-};
+  };
 
-export { setUploadFormSubmit };
+export { setPristine, createOnUploadFormSubmit };
