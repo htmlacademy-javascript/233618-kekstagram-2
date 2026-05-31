@@ -1,4 +1,4 @@
-import { getRandomItemFrom } from '../util';
+import { shuffle } from '../util';
 
 const pictureTemplate = document
   .querySelector('#picture')
@@ -6,6 +6,7 @@ const pictureTemplate = document
 const picturesFragment = document.createDocumentFragment();
 const filtersElement = document.querySelector('.img-filters');
 const activeFilterClass = 'img-filters__button--active';
+const RANDOM_FILTER_COUNT = 10;
 
 const filterData = (data) => {
   const filter = filtersElement
@@ -15,17 +16,9 @@ const filterData = (data) => {
   if (filter === 'default') {
     return data;
   } else if (filter === 'random') {
-    const result = [];
+    shuffle(data);
 
-    while (result.length < 10) {
-      const item = getRandomItemFrom(data);
-
-      if (!result.includes(item)) {
-        result.push(item);
-      }
-    }
-
-    return result;
+    return data.slice(0, RANDOM_FILTER_COUNT);
   } else if (filter === 'discussed') {
     return data.sort(
       (itemA, itemB) => itemB.comments.length - itemA.comments.length,
