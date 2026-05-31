@@ -9,6 +9,7 @@ import {
 const bodyElement = document.body;
 const formElement = document.querySelector('#upload-select-image');
 const submitElement = formElement.querySelector('button[type="submit"]');
+const effectPreviewElements = formElement.querySelectorAll('.effects__preview');
 const hashtagsElement = formElement.querySelector('input[name="hashtags"]');
 const descriptionElement = formElement.querySelector('.text__description');
 const overlayElement = formElement.querySelector('.img-upload__overlay');
@@ -77,7 +78,11 @@ const renderUploadModal = () => {
     const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
 
     if (matches) {
-      uploadedPreviewElement.src = URL.createObjectURL(file);
+      const url = URL.createObjectURL(file);
+      uploadedPreviewElement.src = url;
+      for (const preview of effectPreviewElements) {
+        preview.style.backgroundImage = `url(${url})`;
+      }
     }
 
     overlayElement.classList.remove('hidden');
