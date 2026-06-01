@@ -9,6 +9,7 @@ import {
 const bodyElement = document.body;
 const formElement = document.querySelector('#upload-select-image');
 const submitElement = formElement.querySelector('button[type="submit"]');
+const effectPreviewElements = formElement.querySelectorAll('.effects__preview');
 const hashtagsElement = formElement.querySelector('input[name="hashtags"]');
 const descriptionElement = formElement.querySelector('.text__description');
 const overlayElement = formElement.querySelector('.img-upload__overlay');
@@ -22,6 +23,7 @@ const uploadedPreviewElement = formElement.querySelector(
   '.img-upload__preview img',
 );
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 let pristine;
 let onUploadFormSubmit;
 
@@ -71,6 +73,18 @@ function closeUploadModal() {
 
 const renderUploadModal = () => {
   uploadInputElement.addEventListener('change', () => {
+    const file = uploadInputElement.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
+
+    if (matches) {
+      const url = URL.createObjectURL(file);
+      uploadedPreviewElement.src = url;
+      for (const preview of effectPreviewElements) {
+        preview.style.backgroundImage = `url(${url})`;
+      }
+    }
+
     overlayElement.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
 
