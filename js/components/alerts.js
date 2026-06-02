@@ -32,6 +32,8 @@ const onDocumentClick = (event) => {
   }
 };
 
+const onAlertButtonClick = () => closeAlert();
+
 function closeAlert() {
   bodyElement.querySelector('.alert').remove();
 
@@ -49,7 +51,9 @@ const showAlert = (type = 'SUCCESS') => {
       alertElement.remove();
     }, 5000);
   } else {
-    alertElement.querySelector('button').addEventListener('click', closeAlert);
+    alertElement
+      .querySelector('button')
+      .addEventListener('click', onAlertButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
     document.addEventListener('click', onDocumentClick);
   }

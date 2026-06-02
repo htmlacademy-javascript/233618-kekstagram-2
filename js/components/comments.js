@@ -13,10 +13,10 @@ const onLoaderClick = () => {
   const hiddenComments = commentsElement.querySelectorAll(
     '.social__comment.hidden',
   );
-  const batch = [...hiddenComments].slice(0, 5);
+  const comments = [...hiddenComments].slice(0, 5);
 
-  batch.forEach((comment) => comment.classList.remove('hidden'));
-  const updatedCount = Number(shownElement.textContent) + batch.length;
+  comments.forEach((comment) => comment.classList.remove('hidden'));
+  const updatedCount = Number(shownElement.textContent) + comments.length;
   shownElement.textContent = updatedCount;
 
   if (hiddenComments.length <= 5) {

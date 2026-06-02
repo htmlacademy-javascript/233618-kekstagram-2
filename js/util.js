@@ -30,10 +30,10 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-const shuffle = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
+const shuffle = (items) => {
+  for (let i = items.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [items[i], items[j]] = [items[j], items[i]];
   }
 };
 

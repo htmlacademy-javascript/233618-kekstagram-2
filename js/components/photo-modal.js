@@ -32,6 +32,8 @@ const onOverlayClick = (event) => {
   }
 };
 
+const onCloseButtonClick = () => closePhotoModal();
+
 function closePhotoModal() {
   photoElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
@@ -80,7 +82,7 @@ const renderPhotoModal = (data, toggleElement) => {
     }
   });
 
-  closeButtonElement.addEventListener('click', closePhotoModal);
+  closeButtonElement.addEventListener('click', onCloseButtonClick);
 };
 
 export { renderPhotoModal };
