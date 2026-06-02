@@ -1,7 +1,7 @@
 import { sendPhoto } from './api.js';
 import { showAlert } from './components/alerts.js';
 
-const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
+const HASHTAG_REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
 
 const validateHashtagsFormat = (value) => {
   if (value.length === 0) {
@@ -9,7 +9,7 @@ const validateHashtagsFormat = (value) => {
   }
 
   const hashtags = value.trim().split(/\s+/);
-  return hashtags.every((hashtag) => hashtagRegex.test(hashtag));
+  return hashtags.every((hashtag) => HASHTAG_REGEX.test(hashtag));
 };
 
 const validateHashtagsAmount = (value) => {

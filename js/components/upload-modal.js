@@ -71,6 +71,8 @@ function closeUploadModal() {
   });
 }
 
+const onCloseButtonClick = () => closeUploadModal();
+
 const renderUploadModal = () => {
   uploadInputElement.addEventListener('change', () => {
     const file = uploadInputElement.files[0];
@@ -98,7 +100,7 @@ const renderUploadModal = () => {
 
     formElement.addEventListener('submit', onUploadFormSubmit);
     formElement.addEventListener('change', onEffectChange);
-    overlayCloseElement.addEventListener('click', closeUploadModal);
+    overlayCloseElement.addEventListener('click', onCloseButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
 
     scaleButtonElements.forEach((button) =>
@@ -112,4 +114,4 @@ const renderUploadModal = () => {
   });
 };
 
-export { closeUploadModal, renderUploadModal };
+export { renderUploadModal };
